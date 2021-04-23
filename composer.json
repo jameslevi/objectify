@@ -9,7 +9,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Objectify\\": "src/"
+            "Graphite\\Component\\Objectify\\": "src/"
         }
     }
 }

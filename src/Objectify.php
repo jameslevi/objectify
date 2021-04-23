@@ -1,17 +1,9 @@
 <?php
 
-namespace Objectify;
+namespace Graphite\Component\Objectify;
 
 class Objectify
 {
-    /**
-     * Contains the current version of objectify.
-     * 
-     * @var string
-     */
-
-    private static $version = "v1.0.0";
-
     /**
      * Store object data.
      * 
@@ -29,6 +21,14 @@ class Objectify
     private $locked = false;
 
     /**
+     * Store data object id.
+     * 
+     * @var int
+     */
+
+    private $id;
+
+    /**
      * Construct a new objectify object.
      * 
      * @param   array $data
@@ -40,6 +40,34 @@ class Objectify
     {
         $this->data     = $data;
         $this->locked   = $locked;
+    }
+
+    /**
+     * Set data object id.
+     * 
+     * @param   string $id
+     * @return  $this
+     */
+
+    public function setId($id)
+    {
+        if(is_null($this->id))
+        {
+            $this->id = $id;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Return data object id.
+     * 
+     * @return  mixed
+     */
+
+    public function getId()
+    {
+        return $this->id;
     }
 
     /**
@@ -70,21 +98,21 @@ class Objectify
      * @return  array
      */
 
-    public function getKeys()
+    public function keys()
     {
         return array_keys($this->data);
     }
 
     /**
-     * Return true if key exists from data array.
+     * Return true if data object has key.
      * 
      * @param   string $key
      * @return  bool
      */
 
-    public function exist(string $key)
+    public function has(string $key)
     {
-        return (bool) array_key_exists($key, $this->data);
+        return array_key_exists($key, $this->data);
     }
 
     /**
@@ -96,7 +124,7 @@ class Objectify
 
     public function __get(string $key)
     {
-        if($this->exist($key))
+        if($this->has($key))
         {
             return $this->data[$key];
         }
@@ -117,7 +145,7 @@ class Objectify
             return;
         }
 
-        if($this->exist($key))
+        if($this->has($key))
         {
             $this->data[$key] = $value;
         }
@@ -138,7 +166,7 @@ class Objectify
             return $this;
         }
 
-        if(!$this->exist($key))
+        if(!$this->has($key))
         {
             $this->data[$key] = $value;
         }
@@ -160,7 +188,7 @@ class Objectify
             return $this;
         }
 
-        if($this->exist($key))
+        if($this->has($key))
         {
             unset($this->data[$key]);
         }
@@ -193,7 +221,7 @@ class Objectify
     /**
      * Return an exact copy of this object.
      * 
-     * @return  \Objectify\Objectify
+     * @return  \Graphite\Component\Objectify\Objectify
      */
 
     public function clone()
@@ -212,17 +240,6 @@ class Objectify
     public static function make(array $data = [], bool $locked = false)
     {
         return new self($data, $locked);
-    }
-
-    /**
-     * Return the current version of objectify.
-     * 
-     * @return  string
-     */
-
-    public static function version()
-    {
-        return self::$version;
     }
 
 }
