@@ -21,14 +21,6 @@ class Objectify
     private $locked = false;
 
     /**
-     * Store data object id.
-     * 
-     * @var int
-     */
-
-    private $id;
-
-    /**
      * Construct a new objectify object.
      * 
      * @param   array $data
@@ -36,38 +28,10 @@ class Objectify
      * @return  void
      */
 
-    public function __construct(array $data = [], bool $locked = false)
+    public function __construct(array $data, bool $locked = false)
     {
         $this->data     = $data;
         $this->locked   = $locked;
-    }
-
-    /**
-     * Set data object id.
-     * 
-     * @param   string $id
-     * @return  $this
-     */
-
-    public function setId($id)
-    {
-        if(is_null($this->id))
-        {
-            $this->id = $id;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Return data object id.
-     * 
-     * @return  mixed
-     */
-
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**
@@ -116,13 +80,25 @@ class Objectify
     }
 
     /**
-     * Return data by key.
+     * Return data as object property.
      * 
      * @param   string $key
      * @return  mixed
      */
 
     public function __get(string $key)
+    {
+        return $this->get($key);
+    }
+
+    /**
+     * Return data by key.
+     * 
+     * @param   string $key
+     * @return  mixed
+     */
+
+    public function get(string $key)
     {
         if($this->has($key))
         {
@@ -140,12 +116,7 @@ class Objectify
 
     public function __set(string $key, $value)
     {
-        if($this->isLocked())
-        {
-            return;
-        }
-
-        if($this->has($key))
+        if($this->has($key) && !$this->isLocked())
         {
             $this->data[$key] = $value;
         }
@@ -161,12 +132,9 @@ class Objectify
 
     public function add(string $key, $value)
     {
-        if($this->isLocked())
-        {
-            return $this;
-        }
+        $key = strtolower($key);
 
-        if(!$this->has($key))
+        if(!$this->has($key) && !$this->isLocked())
         {
             $this->data[$key] = $value;
         }
@@ -177,20 +145,26 @@ class Objectify
     /**
      * Remove a property from the data object.
      * 
-     * @param   string $key
+     * @param   mixed $key
      * @return  $this
      */
 
-    public function remove(string $key)
+    public function remove($key)
     {
-        if($this->isLocked())
+        if(!$this->isLocked())
         {
-            return $this;
-        }
+            if(is_string($key))
+            {
+                $key = [$key];
+            }
 
-        if($this->has($key))
-        {
-            unset($this->data[$key]);
+            foreach($key as $index)
+            {
+                if($this->has($index))
+                {
+                    unset($this->data[$index]);
+                }
+            }
         }
 
         return $this;
@@ -230,6 +204,49 @@ class Objectify
     }
 
     /**
+     * Merge two data object into one data object.
+     * 
+     * @param   \Graphite\Component\Objectify\Objectify
+     * @param   bool $override
+     * @return  $this
+     */
+
+    public function merge(Objectify $object, bool $override = false)
+    {
+        foreach($object->keys() as $key)
+        {
+            if(!$this->has($key))
+            {
+                $this->add($key, $object->get($key));
+            }
+            else
+            {
+                if($override)
+                {
+                    $this->{$key} = $object->get($key);
+                }
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Determine if data object has the same data structure.
+     * 
+     * @param   \Graphite\Component\Objectify\Objectify $object
+     * @return  bool
+     */
+
+    public function equals(Objectify $object)
+    {
+        $a = $this->keys();
+        $b = $object->keys();
+
+        return array_diff($a, $b) == array_diff($b, $a);
+    }
+
+    /**
      * Objectify class factory.
      * 
      * @param   array $data
@@ -237,7 +254,7 @@ class Objectify
      * @return  $this
      */
 
-    public static function make(array $data = [], bool $locked = false)
+    public static function make(array $data, bool $locked = false)
     {
         return new self($data, $locked);
     }
