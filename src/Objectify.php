@@ -200,7 +200,7 @@ class Objectify
 
     public function clone()
     {
-        return new self($this->toArray());
+        return new self($this->toArray(), $this->isLocked());
     }
 
     /**
