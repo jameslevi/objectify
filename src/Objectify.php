@@ -5,6 +5,14 @@ namespace Graphite\Component\Objectify;
 class Objectify
 {
     /**
+     * Current version of objectify.
+     * 
+     * @var string
+     */
+
+    private static $version = "v1.0.1";
+
+    /**
      * Store object data.
      * 
      * @var array
@@ -272,6 +280,17 @@ class Objectify
     final public static function make(array $data, bool $muted = false)
     {
         return new self($data, $muted);
+    }
+
+    /**
+     * Return the current version of objectify.
+     * 
+     * @return  string
+     */
+
+    final public static function version()
+    {
+        return self::$version;
     }
 
 }
