@@ -13,36 +13,36 @@ class Objectify
     private $data = array();
 
     /**
-     * Determine if data object is locked.
+     * Determine if data object is muted.
      * 
      * @var bool
      */
 
-    private $locked = false;
+    private $muted = false;
 
     /**
      * Construct a new objectify object.
      * 
      * @param   array $data
-     * @param   bool $locked
+     * @param   bool $muted
      * @return  void
      */
 
-    public function __construct(array $data, bool $locked = false)
+    public function __construct(array $data, bool $muted = false)
     {
         $this->data     = $data;
-        $this->locked   = $locked;
+        $this->muted    = $muted;
     }
 
     /**
-     * Determine if data object is locked and cannot be updated.
+     * Determine if data object is muted.
      * 
      * @return  bool
      */
 
-    public function isLocked()
+    final public function isMuted()
     {
-        return $this->locked;
+        return $this->muted;
     }
 
     /**
@@ -51,7 +51,7 @@ class Objectify
      * @return  bool
      */
 
-    public function empty()
+    final public function empty()
     {
         return empty($this->data);
     }
@@ -62,7 +62,7 @@ class Objectify
      * @return  array
      */
 
-    public function keys()
+    final public function keys()
     {
         return array_keys($this->data);
     }
@@ -74,7 +74,7 @@ class Objectify
      * @return  bool
      */
 
-    public function has(string $key)
+    final public function has(string $key)
     {
         return array_key_exists($key, $this->data);
     }
@@ -98,7 +98,7 @@ class Objectify
      * @return  mixed
      */
 
-    public function get(string $key)
+    final public function get(string $key)
     {
         if($this->has($key))
         {
@@ -116,10 +116,25 @@ class Objectify
 
     public function __set(string $key, $value)
     {
-        if($this->has($key) && !$this->isLocked())
+        $this->set($key, $value);
+    }
+
+    /**
+     * Update the value of a data object property.
+     * 
+     * @param   string $key
+     * @param   mixed $value
+     * @return  $this
+     */
+
+    final public function set(string $key, $value)
+    {
+        if($this->has($key) && !$this->isMuted())
         {
             $this->data[$key] = $value;
         }
+
+        return $this;
     }
 
     /**
@@ -130,11 +145,11 @@ class Objectify
      * @return  $this
      */
 
-    public function add(string $key, $value)
+    final public function add(string $key, $value)
     {
         $key = strtolower($key);
 
-        if(!$this->has($key) && !$this->isLocked())
+        if(!$this->has($key) && !$this->isMuted())
         {
             $this->data[$key] = $value;
         }
@@ -149,9 +164,9 @@ class Objectify
      * @return  $this
      */
 
-    public function remove($key)
+    final public function remove($key)
     {
-        if(!$this->isLocked())
+        if(!$this->isMuted())
         {
             if(is_string($key))
             {
@@ -176,7 +191,7 @@ class Objectify
      * @return  array
      */
 
-    public function toArray()
+    final public function toArray()
     {
         return $this->data;
     }
@@ -187,7 +202,7 @@ class Objectify
      * @return  string
      */
 
-    public function toJson()
+    final public function toJson()
     {
         return json_encode($this->data);
     }
@@ -198,9 +213,9 @@ class Objectify
      * @return  \Graphite\Component\Objectify\Objectify
      */
 
-    public function clone()
+    final public function clone()
     {
-        return new self($this->toArray(), $this->isLocked());
+        return new self($this->toArray(), $this->isMuted());
     }
 
     /**
@@ -211,7 +226,7 @@ class Objectify
      * @return  $this
      */
 
-    public function merge(Objectify $object, bool $override = false)
+    final public function merge(Objectify $object, bool $override = false)
     {
         foreach($object->keys() as $key)
         {
@@ -238,7 +253,7 @@ class Objectify
      * @return  bool
      */
 
-    public function equals(Objectify $object)
+    final public function equals(Objectify $object)
     {
         $a = $this->keys();
         $b = $object->keys();
@@ -250,13 +265,13 @@ class Objectify
      * Objectify class factory.
      * 
      * @param   array $data
-     * @param   bool $locked
+     * @param   bool $muted
      * @return  $this
      */
 
-    public static function make(array $data, bool $locked = false)
+    final public static function make(array $data, bool $muted = false)
     {
-        return new self($data, $locked);
+        return new self($data, $muted);
     }
 
 }
