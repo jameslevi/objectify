@@ -55,7 +55,7 @@ $data->add("pi", 3.14);
 ```php
 if($data->has("x"))
 {
-    echo "Object contains x.";
+    // Data object has a key named x.
 }
 ```
 7. You can remove data from the data object.
@@ -64,18 +64,50 @@ $data->remove("z"); // This will remove z from the data object.
 ```
 8. You can return all data object keys.
 ```php
-var_dump($data->keys()); // This will display all data object keys.
+$data->keys(); // This will return all data object keys.
 ```
 9. To retrieve the object data, just use the toArray method.
 ```php
-var_dump($data->toArray()); // This will display all the data from the data object.
+$data->toArray(); // This will return all the data from the data object in array.
 ```
 10. You can also return JSON formatted data.
 ```php
-echo $data->toJson(); // This will display the data in json format.
+$data->toJson(); // This will return json formatted string.
 ```
-## Locked Data Object ##
-Adding,updating or deleting of data is disabled when data object is locked.
+## Extend Objectify ##
+1. You can extend objectify to an entity. For this example let's use car as an entity.
+```php
+<?php
+
+use Graphite\Component\Objectify\Objectify;
+
+class Car extends Objectify
+{
+    public function setDriver($name)
+    {
+        $this->driver = "Mr. " . ucwords($name);
+    }
+}
+```
+2. Now let's instantiate a new car object.
+```php
+$car = new Car([
+    'manufacturer'          => 'Honda',
+    'model'                 => 'Civic',
+    'type'                  => 'Sedan',
+    'driver'                => null,
+]);
+```
+3. We can now manipulate car object data.
+```php
+$car->setDriver("james crisostomo");
+```
+4. Now let's echo the driver of our car.
+```php
+echo $car->driver; // Result will be "Mr. James Crisostomo".
+```
+## Muted Data Object ##
+Adding,updating or deleting of data is disabled when data object is muted.
 ```php
 $data = new Objectify(["x" => 0], true);
 
