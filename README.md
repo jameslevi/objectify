@@ -107,7 +107,7 @@ $car->setDriver("james crisostomo");
 echo $car->driver; // Result will be "Mr. James Crisostomo".
 ```
 ## Muted Data Object ##
-Adding,updating or deleting of data is disabled when data object is muted.
+Adding, updating or deleting of data is disabled when data object is muted.
 ```php
 $data = new Objectify(["x" => 0], true);
 
