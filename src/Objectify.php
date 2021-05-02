@@ -9,15 +9,13 @@ class Objectify
      * 
      * @var string
      */
-
-    private static $version = "v1.0.1";
+    private static $version = "v1.0.2";
 
     /**
      * Store object data.
      * 
      * @var array
      */
-
     private $data = array();
 
     /**
@@ -25,7 +23,6 @@ class Objectify
      * 
      * @var bool
      */
-
     private $muted = false;
 
     /**
@@ -35,7 +32,6 @@ class Objectify
      * @param   bool $muted
      * @return  void
      */
-
     public function __construct(array $data, bool $muted = false)
     {
         $this->data     = $data;
@@ -47,7 +43,6 @@ class Objectify
      * 
      * @return  bool
      */
-
     final public function isMuted()
     {
         return $this->muted;
@@ -58,7 +53,6 @@ class Objectify
      * 
      * @return  bool
      */
-
     final public function empty()
     {
         return empty($this->data);
@@ -69,7 +63,6 @@ class Objectify
      * 
      * @return  array
      */
-
     final public function keys()
     {
         return array_keys($this->data);
@@ -81,7 +74,6 @@ class Objectify
      * @param   string $key
      * @return  bool
      */
-
     final public function has(string $key)
     {
         return array_key_exists($key, $this->data);
@@ -93,7 +85,6 @@ class Objectify
      * @param   string $key
      * @return  mixed
      */
-
     public function __get(string $key)
     {
         return $this->get($key);
@@ -105,7 +96,6 @@ class Objectify
      * @param   string $key
      * @return  mixed
      */
-
     final public function get(string $key)
     {
         if($this->has($key))
@@ -121,7 +111,6 @@ class Objectify
      * @param   mixed $value
      * @return  void
      */
-
     public function __set(string $key, $value)
     {
         $this->set($key, $value);
@@ -134,7 +123,6 @@ class Objectify
      * @param   mixed $value
      * @return  $this
      */
-
     final public function set(string $key, $value)
     {
         if($this->has($key) && !$this->isMuted())
@@ -152,7 +140,6 @@ class Objectify
      * @param   mixed $value
      * @return  $this
      */
-
     final public function add(string $key, $value)
     {
         $key = strtolower($key);
@@ -171,7 +158,6 @@ class Objectify
      * @param   mixed $key
      * @return  $this
      */
-
     final public function remove($key)
     {
         if(!$this->isMuted())
@@ -198,7 +184,6 @@ class Objectify
      * 
      * @return  array
      */
-
     final public function toArray()
     {
         return $this->data;
@@ -209,7 +194,6 @@ class Objectify
      * 
      * @return  string
      */
-
     final public function toJson()
     {
         return json_encode($this->data);
@@ -220,7 +204,6 @@ class Objectify
      * 
      * @return  \Graphite\Component\Objectify\Objectify
      */
-
     final public function clone()
     {
         return new self($this->toArray(), $this->isMuted());
@@ -233,7 +216,6 @@ class Objectify
      * @param   bool $override
      * @return  $this
      */
-
     final public function merge(Objectify $object, bool $override = false)
     {
         foreach($object->keys() as $key)
@@ -260,7 +242,6 @@ class Objectify
      * @param   \Graphite\Component\Objectify\Objectify $object
      * @return  bool
      */
-
     final public function equals(Objectify $object)
     {
         $a = $this->keys();
@@ -276,7 +257,6 @@ class Objectify
      * @param   bool $muted
      * @return  $this
      */
-
     final public static function make(array $data, bool $muted = false)
     {
         return new self($data, $muted);
@@ -287,7 +267,6 @@ class Objectify
      * 
      * @return  string
      */
-
     final public static function version()
     {
         return self::$version;

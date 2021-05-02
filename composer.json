@@ -3,6 +3,13 @@
     "description": "Is a simple data to object wrapper library in PHP.",
     "type": "library",
     "license": "MIT",
+    "authors": [
+        {
+            "name": "James Levi Crisostomo",
+            "email": "nerdlabenterprise@gmail.com",
+            "homepage": "https://github.com/jameslevi"
+        }
+    ],
     "require": {
         "php": ">=5.3.0"
     },
