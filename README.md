@@ -112,7 +112,7 @@ $data = new Objectify(["x" => 0], true);
 
 $data->set("y", 1); // Updating value is disabled.
 $data->add("y", 1); // Adding new data is disabled.
-$data->remove("x"); // Removing existing data is disabled.
+$data->remove("x"); // Removing data is disabled.
 ```
 ## Cloning Data Object
 You can create multiple copies of data object using clone method.
