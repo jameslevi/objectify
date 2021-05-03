@@ -267,7 +267,7 @@ class Objectify
      * 
      * @return  string
      */
-    final public static function version()
+    public static function version()
     {
         return self::$version;
     }
