@@ -9,7 +9,7 @@ class Objectify
      * 
      * @var string
      */
-    private static $version = "v1.0.2";
+    private static $version = "v1.0.3";
 
     /**
      * Store object data.
