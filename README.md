@@ -11,43 +11,36 @@ composer require jameslevi/objectify
 ```
 2. If not using any framework, include the composer autoload mechanism at the upper section of your code.
 ```php
-<?php
-
-if(file_exists(__DIR__.'/vendor/autoload.php'))
-{
-    require __DIR__.'/vendor/autoload.php';
-}
+require_once __DIR__.'/vendor/autoload.php';
 ```
 3. Import the objectify class.
 ```php
-<?php
-
 use Graphite\Component\Objectify\Objectify;
 ```
 ## Getting Started
 1. Instantiate a new objectify class.
 ```php
 $data = new Objectify(array(
-  'x' => 0,
-  'y' => 0,
-  'z' => 1,
+  "x" => 0,
+  "y" => 0,
+  "z" => 1,
 ));
 ```
-2. You can access each data using get method.
+2. You can access the value of x using the following methods.
 ```php
-echo $data->get("x"); // Will echo the value of x.
+echo $data->get("x");
+
+// or
+
+echo $data->x;
 ```
-You can also retrieve data as an object property.
+3. You can also update the value of x.
 ```php
-echo $data->x; // Will echo the value of x.
-```
-3. You can also update values of each data.
-```php
-$data->set("x", 100); // Set the new value of x.
-```
-You can also set value as an object property.
-```php
-$data->x = 200; // Set the new value of x.
+$data->set("x", 100);
+
+// or
+
+$data->x = 100;
 ```
 4. You can add new data using add method.
 ```php
@@ -82,42 +75,43 @@ use Graphite\Component\Objectify\Objectify;
 
 class Car extends Objectify
 {
-    public function setDriver($name)
+    public function setColor(string $color)
     {
-        $this->driver = "Mr. " . ucwords($name);
+        $this->color = $color;
     }
 }
 ```
 2. Now let's instantiate a new car object.
 ```php
 $car = new Car(array(
-    'manufacturer'          => 'Honda',
-    'model'                 => 'Civic',
-    'type'                  => 'Sedan',
-    'driver'                => null,
+    "manufacturer"          => "Honda",
+    "model"                 => "Civic",
+    "type"                  => "Sedan",
+    "color"                 => "red",
 ));
 ```
 3. We can now manipulate car object data.
 ```php
-$car->setDriver("james crisostomo");
+$car->setColor("blue");
 ```
-4. Now let's echo the driver of our car.
+4. Now let's echo the color of our car.
 ```php
-echo $car->driver; // Result will be "Mr. James Crisostomo".
+echo $car->color; // Result will be "blue".
 ```
 ## Muted Data Object
 Adding, updating or deleting of data is disabled when data object is muted.
 ```php
-$data = new Objectify(["x" => 0], true);
+$data = new Objectify(array("x" => 0), true);
 
-$data->set("y", 1); // Updating value is disabled.
-$data->add("y", 1); // Adding new data is disabled.
-$data->remove("x"); // Removing data is disabled.
+// All of this methods are freezed.
+$data->set("y", 1);
+$data->add("y", 1);
+$data->remove("x");
 ```
 ## Cloning Data Object
 You can create multiple copies of data object using clone method.
 ```php
-$new_data = $data->clone(); // This will create an exact copy of the data object.
+$new_data = $data->clone();
 ```
 ## Contribution
 For issues, concerns and suggestions, you can email James Crisostomo via nerdlabenterprise@gmail.com.
